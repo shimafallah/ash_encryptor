@@ -1,8 +1,7 @@
+import argparse
+import hashlib
 from Crypto.Cipher import AES
 from Crypto import Random
-import argparse
-import os.path
-import hashlib
 import os
 import re
 
@@ -34,6 +33,7 @@ class Ash:
 				fo.write(enc)
 				print(f"File Encrypted as {f_name}.ash")
 			os.remove(file_name)
+			
 
 	def decrypt(self, ciphertext, key):
 		iv = ciphertext[:AES.block_size]
@@ -61,20 +61,20 @@ class Ash:
 		os.remove(file_name)
 
 
-class ArgumentParserError(Exception): pass
-class ThrowingArgumentParser(argparse.ArgumentParser):
-	def error(self, message):
-		raise ArgumentParserError(message)
-
-parser = ThrowingArgumentParser(description="Encrypt and Decrypt")
-parser.add_argument('func', nargs='?', choices=['e','d'], const='')
-try:
-	args, sub_args = parser.parse_known_args()
-except:
-	print('You Have to use one of e or d to encrypt or decrypt')
-
 def args_file():
-	parser = ThrowingArgumentParser(description='Encrypt and Decrypt')
+	class ArgumentParserError(Exception): pass
+	class ThrowingArgumentParser(argparse.ArgumentParser):
+		def error(self, message):
+			raise ArgumentParserError(message)
+
+	parser = ThrowingArgumentParser(description="Encrypt and Decrypt")
+	parser.add_argument('func', nargs='?', choices=['e','d'], const='')
+	
+	try:
+		args, sub_args = parser.parse_known_args()
+	except:
+		print('You Have to use one of e or d to encrypt or decrypt')
+	
 	parser.add_argument('-f', nargs=1, help='Your filename')
 	parser.add_argument('-p',nargs=1 ,help='Your password')
 	try:
@@ -83,45 +83,49 @@ def args_file():
 		if arg_parse.p is not None:
 			for i in arg_parse.p:
 				password = i
+			PasswordHash = hashlib.md5(password.encode()).hexdigest()
+			CombinedKey = password + PasswordHash[:32 - len(password)]
+			CombinedKey = CombinedKey.encode()
+			enc = Ash(CombinedKey)
+			
 		else:
 			print('Please Use -p to enter Password')
 	except:
 		print("Password and Filename Can't Be Empty")
-	PasswordHash = hashlib.md5(password.encode()).hexdigest()
-	CombinedKey = password + PasswordHash[:32 - len(password)]
-	CombinedKey = CombinedKey.encode()
-	enc = Ash(CombinedKey)
-	return arg_parse, enc
+	
+	
+	# return arg_parse, enc, args
 
-try:
-	if args.func == 'e':
-		try:
-			arg_parse = args_file()[0]
-			enc = args_file()[1]
-			if arg_parse.f is not None:
-				for i in arg_parse.f:
-					enc.encrypt_file(i)
-			else:
-				print('Please Use -f to enter filename')
-		except ValueError:
-			print('Password cannot be more than 32 letters')
+	try:
+		# args= args_file()[2]
+		if args.func == 'e':
+			try:
+				# arg_parse = args_file()[0]
+				# enc = args_file()[1]
+				if arg_parse.f is not None:
+					for i in arg_parse.f:
+						enc.encrypt_file(i)
+				else:
+					print('Please Use -f to enter filename')
+			except ValueError:
+				print('Password cannot be more than 32 letter')
 
-	elif args.func == 'd':
-		try:
-			args = args_file()[0]
-			enc = args_file()[1]
-			if args.f:
-				for i in args.f:
-					enc.decrypt_file(i)
-			else:
-				print('Please Use -f to enter filename')
-		except TypeError:
-			print('Your password is not the same')
-	else:
-		print('You Have to use one of e or d to encrypt or decrypt')
-except NameError:
-	pass
+		elif args.func == 'd':
+			try:
+				# args = args_file()[0]
+				# enc = args_file()[1]
+				if arg_parse.f is not None:
+					for i in arg_parse.f:
+						enc.decrypt_file(i)
+				else:
+					print('Please Use -f to enter filename')
+			except TypeError:
+				print('Your password is not the same')
+		else:
+			print('You Have to use one of e or d to encrypt or decrypt')
+	except NameError:
+		pass
 
-
-
+def main():
+    args_file()
 
