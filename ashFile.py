@@ -1,7 +1,9 @@
-import argparse
-import hashlib
 from Crypto.Cipher import AES
 from Crypto import Random
+import argparse
+import hashlib
+import random  
+import string  
 import os
 import re
 
@@ -16,13 +18,20 @@ class Ash:
 		cipher = AES.new(key, AES.MODE_GCM, iv)
 		return iv + cipher.encrypt(message)
 
-	def encrypt_file(self, file_name):
-		if os.path.isfile(file_name):
-			with open(file_name, 'rb') as fo:
+	def encrypt_file(self, myfile_name):
+		if os.path.isfile(myfile_name):
+			with open(myfile_name, 'rb') as fo:
 				plaintext = fo.read()
 		else:
 			print ("File doesn't exists")
+		# Make random str
+		letters = string.ascii_lowercase 
+		result = ''.join((random.choice(letters)) for x in range(5))  
+		f_name, f_ext = os.path.splitext(myfile_name) # Change file name
+		f_name = result
+		file_name = f_name+f_ext
 		file_encode = f'({file_name})'.encode() #Get filename
+
 		file_byte = file_encode + plaintext #Add filename to bytes
 		enc = self.encrypt(file_byte, self.key)
 		f_name, f_ext = os.path.splitext(file_name) #Get file name without extension
@@ -32,7 +41,7 @@ class Ash:
 			with open(f_name + ".ash", 'wb') as fo:
 				fo.write(enc)
 				print(f"File Encrypted as {f_name}.ash")
-			os.remove(file_name)
+			os.remove(myfile_name)
 			
 
 	def decrypt(self, ciphertext, key):
@@ -69,12 +78,12 @@ def args_file():
 
 	parser = ThrowingArgumentParser(description="Encrypt and Decrypt")
 	parser.add_argument('func', nargs='?', choices=['e','d'], const='')
-	
+
 	try:
 		args, sub_args = parser.parse_known_args()
 	except:
 		print('You Have to use one of e or d to encrypt or decrypt')
-	
+
 	parser.add_argument('-f', nargs=1, help='Your filename')
 	parser.add_argument('-p',nargs=1 ,help='Your password')
 	try:
@@ -92,8 +101,8 @@ def args_file():
 			print('Please Use -p to enter Password')
 	except:
 		print("Password and Filename Can't Be Empty")
-	
-	
+
+
 	# return arg_parse, enc, args
 
 	try:
