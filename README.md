@@ -2,7 +2,7 @@
 
 Encrypt and decrypt files and directories with AES-256-GCM.
 
-[![PyPI version](https://img.shields.io/pypi/v/ash-encrypt)](https://pypi.org/project/ash-encrypt/)
+[![PyPI version](https://img.shields.io/pypi/v/ash-encrypt?cache=false)](https://pypi.org/project/ash-encrypt/)
 [![Python versions](https://img.shields.io/pypi/pyversions/ash-encrypt)](https://pypi.org/project/ash-encrypt/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
