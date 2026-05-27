@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ash-encrypt"
+version = "0.3.0"
+description = "Encrypt and decrypt files and directories with AES-256-GCM"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "shimaf", email = "fshima02@gmail.com"}
+]
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "pycryptodome>=3.15",
+    "tqdm>=4.60",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "hypothesis>=6.0",
+    "pytest-cov>=4.0",
+    "build>=1.0",
+]
+
+[project.scripts]
+ash-encrypt = "mainfile.ashFile:main"
+
+[project.urls]
+Homepage = "https://github.com/shimafallah/ash_encryptor"
+
+[tool.setuptools.packages.find]
+include = ["mainfile*"]

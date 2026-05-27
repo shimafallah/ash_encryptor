@@ -1,30 +1,88 @@
-# Ash-file-Encryptor/Decryptor
-Image and File encryptor/decryptor with Python
+# ash-encrypt
 
-## Installation  
-> Works perfectly on Windows 10 and Ubuntu 20.04
- 
-You can use this `pip install pycrypto ` for install pycrypto
+Encrypt and decrypt files and directories with AES-256-GCM.
 
-## Flags
-**`e`** Encryption Mode
-**`d`** Decryption Mode
-**`-p`** Password
-**`-f`** FileName
+[![PyPI version](https://img.shields.io/pypi/v/ash-encrypt)](https://pypi.org/project/ash-encrypt/)
+[![Python versions](https://img.shields.io/pypi/pyversions/ash-encrypt)](https://pypi.org/project/ash-encrypt/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-## Usage
+## Features
 
-**Encryption**
-`ash e -p 123321 -f picture.png`
-`ash e -p 123321 -f file.txt`
+- **AES-256-GCM encryption** — authenticated encryption with strong confidentiality and integrity guarantees
+- **File and directory support** — encrypt individual files or entire directories
+- **Simple CLI** — intuitive command-line interface with encrypt/decrypt modes
+- **Progress bars** — visual feedback for large file operations via tqdm
+- **Streaming encryption** — handles large files without loading them entirely into memory
+- **Cross-platform** — works on Linux, macOS, and Windows
 
-> it will encrypt picture.png to picture.ash  with  **123321**  password
-> also it will encrypt file.txt to file.ash  with  **123321**  password
+## Installation
 
-**Decryption**
+```bash
+pip install ash-encrypt
+```
 
-`ash d -p 123321 -f picture.ash`
-`ash d -p 123321 -f file.ash`
+## Quick Start
 
-> it will decrypt picture.ash to picture.png with  **123321**  password
-> also  it will decrypt file.ash to file.txt with  **123321**  password
+### Encrypt a file
+
+```bash
+ash-encrypt e -p <password> -f <file>
+```
+
+This produces a `.ash` encrypted file. For example:
+
+```bash
+ash-encrypt e -p mysecretpass -f document.pdf
+# Output: document.ash
+```
+
+### Decrypt a file
+
+```bash
+ash-encrypt d -p <password> -f <file.ash>
+```
+
+```bash
+ash-encrypt d -p mysecretpass -f document.ash
+# Output: document.pdf
+```
+
+### CLI Flags
+
+| Flag | Description |
+|------|-------------|
+| `e`  | Encryption mode |
+| `d`  | Decryption mode |
+| `-p` | Password |
+| `-f` | File or directory path |
+
+## Supported Platforms
+
+- Linux
+- macOS
+- Windows
+
+## Requirements
+
+- Python 3.8+
+- [pycryptodome](https://pypi.org/project/pycryptodome/) >= 3.15
+- [tqdm](https://pypi.org/project/tqdm/) >= 4.60
+
+## Development
+
+Clone the repository and install with dev dependencies:
+
+```bash
+git clone https://github.com/shimafallah/ash_encryptor.git
+cd ash_encryptor
+pip install -e ".[dev]"
+```
+
+## License
+
+[MIT](LICENSE)
+
+## Links
+
+- **GitHub:** https://github.com/shimafallah/ash_encryptor
+- **PyPI:** https://pypi.org/project/ash-encrypt/
